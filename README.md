@@ -4,9 +4,9 @@ In this project, you are going to take the knowledge that you just gained to
 build a data-driven application with Flask. In this, you will implement a
 calendaring application with
 
-* Appointments
-* A Google Calendar-like user interface (but no client-side fancy)
-* A stretch goal of recurring appointments
+- Appointments
+- A Google Calendar-like user interface (but no client-side fancy)
+- A stretch goal of recurring appointments
 
 This is going to combine Flask, SQLite3, WTForms, and Jinja2 into one project.
 YAY!
@@ -220,7 +220,7 @@ Inside there, create a table named "appointments" with the following
 specification.
 
 | Column name    | Column type  | Constraints |
-|----------------|--------------|-------------|
+| -------------- | ------------ | ----------- |
 | id             | SERIAL       | Primary Key |
 | name           | VARCHAR(200) | Not Null    |
 | start_datetime | TIMESTAMP    | Not Null    |
@@ -235,7 +235,7 @@ the current date in "YYYY-MM-DD" format.
 ```sql
 INSERT INTO appointments (name, start_datetime, end_datetime, description, private)
 VALUES
-('My appointment', '«DATE» 14:00:00', '«DATE» 15:00:00',
+('My appointment', '2020-10-20 14:00:00', '2020-10-20 15:00:00',
  'An appointment for me', false);
 ```
 
@@ -317,8 +317,8 @@ Format Codes][3] in the Python documentation.) Make sure to use `strftime` in
 your Jinja template to make the times human readable.
 
 In the `main.html` file, use the `rows` variable that you just passed in to
-create a table that shows each appointment's name, start_date, and end_date.
-Refer to _Jinja Templates_ for the syntax on how to write a loop. The table
+create a table that shows each appointment's name, start*date, and end_date.
+Refer to \_Jinja Templates* for the syntax on how to write a loop. The table
 could look like this.
 
 ```html
@@ -359,12 +359,12 @@ attribute that you'll use on the form class, and what kind of Basic or
 Convenience Field it should use from WTForms.
 
 | Column name                | Data type | Attribute name | Field type      |
-|----------------------------|-----------|----------------|-----------------|
+| -------------------------- | --------- | -------------- | --------------- |
 | name                       | string    | name           | `StringField`   |
 | start_datetime (date part) | date      | start_date     | `DateField`     |
 | start_datetime (time part) | time      | start_time     | `TimeField`     |
-| end_datetime   (date part) | date      | end_date       | `DateField`     |
-| end_datetime   (time part) | time      | end_time       | `TimeField`     |
+| end_datetime (date part)   | date      | end_date       | `DateField`     |
+| end_datetime (time part)   | time      | end_time       | `TimeField`     |
 | description                | string    | description    | `TextAreaField` |
 | private                    | Boolean   | private        | `BooleanField`  |
 
@@ -444,7 +444,10 @@ refer to _Serving HTML From Flask_ for how to render the form from the
       <th>Name</th>
       <th>Start</th>
       <th>End</th>
-<!-- the rest of the HTML -->
+      <!-- the rest of the HTML -->
+    </tr>
+  </thead>
+</table>
 ```
 
 Once you have that done and rendered, it'll look something like this.
@@ -585,14 +588,12 @@ understanding gained.
 
 ```html
 <div>
-  {{ form.end_date.label }} {{ form.end_date }}
-
-  {% if form.end_date.errors %}
-    <ul class="errors">
-      {% for error in form.end_date.errors %}
-        <li>{{ error }}</li>
-        {% endfor %}
-    </ul>
+  {{ form.end_date.label }} {{ form.end_date }} {% if form.end_date.errors %}
+  <ul class="errors">
+    {% for error in form.end_date.errors %}
+    <li>{{ error }}</li>
+    {% endfor %}
+  </ul>
   {% endif %}
 </div>
 ```
@@ -612,9 +613,9 @@ Now, you will use routing to figure out what day to show and constrain your
 
 You're going to change the routes, now, in the following way:
 
-* The `main` method which handles "/" will redirect to a new path
+- The `main` method which handles "/" will redirect to a new path
   `/<year>/<month>/<day>` where year, month, and day are for the current date
-* A new method named `daily` will show the appointments for that day
+- A new method named `daily` will show the appointments for that day
 
 To do this, add the `daily` method to your `app.routes`. It should have three
 parameters: `year`, `month`, and `day`. The route should reflect that using
@@ -634,11 +635,11 @@ and redirect to that. However, Flask has a built-in method named `url_for` that
 will build the path for you. The `url_for` method takes the following
 parameters:
 
-* The name of the method that will handle the route. If you're in a Blueprint,
+- The name of the method that will handle the route. If you're in a Blueprint,
   prepend the name of the method with a ".". For this case, you want to reroute
   to the "daily" method in the same Blueprint, so the first argument for
   `url_for` will be `".daily"`.
-* A series of keyword arguments that will provide values for any of the
+- A series of keyword arguments that will provide values for any of the
   placeholders in the route. In this case, the route has placeholders for
   "year", "month", and "day". Because of that, you would provide those as
   keyword arguments `year=value`, `month=value`, and `day=value`.
